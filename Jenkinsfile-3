@@ -4,7 +4,7 @@ pipeline {
     stage('run collection') {
       steps {
         sh 'docker run -t postman/newman run -h'
-        sh 'docker run -v ${WORKSPACE}:/etc/newman --workdir /etc/newman -t postman/newman run https://www.getpostman.com/collections/e088d4aa4ec778b7ff56 --color off --disable-unicode'
+        sh 'docker run -v ${WORKSPACE}:/etc/newman --workdir /etc/newman -t postman/newman run https://api.postman.com/collections/33302199-fcf52342-a9dc-48c0-96b0-ccfd06427197?access_key=PMAT-01HR3GJ0Z26WMFBAK54VEDWYQP --color off --disable-unicode'
       }
     }
   }
