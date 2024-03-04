@@ -1,0 +1,331 @@
+{
+	"info": {
+		"_postman_id": "fcf52342-a9dc-48c0-96b0-ccfd06427197",
+		"name": "Tacos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33302199",
+		"_collection_link": "https://www.postman.com/cryosat-engineer-12548287/workspace/taco-apis/collection/33302199-fcf52342-a9dc-48c0-96b0-ccfd06427197?action=share&source=collection_link&creator=33302199"
+	},
+	"item": [
+		{
+			"name": "Get API status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status response\", function () {\r",
+							"    pm.response.to.have.status(200)\r",
+							"    // or\r",
+							"    pm.expect(pm.response.code).to.eql(200)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Headers\", function () {\r",
+							"    console.log(pm.response.headers.get('x-powered-by'))\r",
+							"    pm.expect(pm.response.headers.get('x-powered-by')).to.eql('Next.js')\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "Retrieve the current status of the API"
+			},
+			"response": [
+				{
+					"name": "API status",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"status"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"status\": \"<string>\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Get all products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let  response\r",
+							"\r",
+							"pm.test(\"Response body is JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"    response = pm.response.json()\r",
+							"    console.log(response.menuProductCategories)\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://www.tacobell.com/tacobellwebservices/v4/tacobell/products/menu/040336",
+					"protocol": "https",
+					"host": [
+						"www",
+						"tacobell",
+						"com"
+					],
+					"path": [
+						"tacobellwebservices",
+						"v4",
+						"tacobell",
+						"products",
+						"menu",
+						"040336"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "tacos",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "3",
+							"disabled": true
+						}
+					]
+				},
+				"description": "Retrieve a paginated list of products, 10 products per page"
+			},
+			"response": [
+				{
+					"name": "A list of products",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products?page=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "The page number to fetch"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"category\": \"<string>\",\n    \"name\": \"<string>\",\n    \"isAvailable\": \"<boolean>\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"category\": \"<string>\",\n    \"name\": \"<string>\",\n    \"isAvailable\": \"<boolean>\"\n  }\n]"
+				}
+			]
+		},
+		{
+			"name": "Get single product for delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let  response\r",
+							"\r",
+							"pm.test(\"Response body is JSON\", function () {\r",
+							"    pm.response.to.be.json;\r",
+							"     response = pm.response.json()\r",
+							"    console.log(response)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Product is Double Stacked Taco\", function() {\r",
+							"    //pm.expect(response.id).to.eql(parseInt(pm.collectionVariables.get('productId')))\r",
+							"    pm.expect(response).to.have.property('name')\r",
+							"    pm.expect(response.name).to.be.a('string')\r",
+							"    pm.expect(response.price.value).to.be.a('number')\r",
+							"    pm.expect(response.price.value).to.be.greaterThan(0)\r",
+							"    pm.expect(response.isDisplayedOnStore).to.be.true\r",
+							"\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://www.tacobell.com/tacobellwebservices/v4/tacobell/products/26018/040336/",
+					"protocol": "https",
+					"host": [
+						"www",
+						"tacobell",
+						"com"
+					],
+					"path": [
+						"tacobellwebservices",
+						"v4",
+						"tacobell",
+						"products",
+						"26018",
+						"040336",
+						""
+					]
+				},
+				"description": "Retrieve a single product by specifying the product ID."
+			},
+			"response": [
+				{
+					"name": "A list of products",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/products?page=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"description": "The page number to fetch"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"category\": \"<string>\",\n    \"name\": \"<string>\",\n    \"isAvailable\": \"<boolean>\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"category\": \"<string>\",\n    \"name\": \"<string>\",\n    \"isAvailable\": \"<boolean>\"\n  }\n]"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
