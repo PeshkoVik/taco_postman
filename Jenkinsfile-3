@@ -3,8 +3,8 @@ pipeline {
   stages {
     stage('run collection') {
       steps {
-        sh 'docker run -t postman/newman run -h'
-        sh 'docker run -v ${WORKSPACE}:/etc/newman --workdir /etc/newman -t postman/newman run Tacos.postman_collection.json --color off --disable-unicode'
+        sh 'sudo docker run -t postman/newman run -h'
+        sh 'sudo docker run -v ${WORKSPACE}:/etc/newman --workdir /etc/newman -t postman/newman run Tacos.postman_collection.json --color off --disable-unicode'
       }
     }
   }
